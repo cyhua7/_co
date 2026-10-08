@@ -13,51 +13,60 @@
 
 // Put your code here.
 
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/04/Fill.asm
+
 // Runs an infinite loop that listens to the keyboard input.
-// When a key is pressed (any key), the program blackens the screen.
-// When no key is pressed, the program clears the screen.
+// When a key is pressed (any key), the program blackens the screen,
+// i.e. writes "black" in every pixel;
+// the screen should remain fully black as long as the key is pressed. 
+// When no key is pressed, the program clears the screen, i.e. writes
+// "white" in every pixel;
+// the screen should remain fully clear as long as no key is pressed.
 
 (LOOP)
-    // 1. 讀取鍵盤輸入狀態
+    // 1. Read keyboard input state
     @KBD
     D=M
 
-    // 2. 判斷按鍵狀態：若 D == 0 (沒按鍵) 則跳轉到 CLEAR，否則填黑
+    // 2. Branch: if D == 0 (no key), go to CLEAR; otherwise set BLACK
     @CLEAR
     D;JEQ
 
-    // 3. 設定填色數值為黑色 (-1 / 1111111111111111)
+    // 3. Set color to black (-1 / 0xFFFF)
     @color
     M=-1
     @DRAW
     0;JMP
 
 (CLEAR)
-    // 4. 設定填色數值為白色 (0)
+    // 4. Set color to white (0 / 0x0000)
     @color
     M=0
 
 (DRAW)
-    // 5. 初始化螢幕指標 (screen pointer) 指向 SCREEN 起始位址 (16384)
+    // 5. Initialize screen pointer (ptr) to SCREEN base address (16384)
     @SCREEN
     D=A
     @ptr
     M=D
 
 (DRAW_LOOP)
-    // 6. 將目前顏色的值寫入指標所指向的螢幕記憶體
+    // 6. Write color to the memory address stored in ptr
     @color
     D=M
     @ptr
     A=M
     M=D
 
-    // 7. 指標前進下一個 WORD (+1)
+    // 7. Advance pointer to the next word (+1)
     @ptr
     M=M+1
 
-    // 8. 檢查是否已塗滿整個螢幕 (SCREEN 起始 16384 + 8192 個 WORD = KBD 位址 24576)
-    // 計算 ptr - KBD，若小於 0 代表尚未塗滿，繼續迴圈
+    // 8. Check if whole screen is filled (SCREEN 16384 + 8192 words = KBD address 24576)
+    // D = ptr - KBD; if D < 0, continue loop
     @ptr
     D=M
     @KBD
@@ -65,6 +74,6 @@
     @DRAW_LOOP
     D;JLT
 
-    // 9. 畫面刷洗完畢，跳回主迴圈繼續監聽鍵盤
+    // 9. Screen redraw complete; return to main loop to continuously listen to keyboard
     @LOOP
     0;JMP
