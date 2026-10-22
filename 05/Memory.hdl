@@ -22,10 +22,28 @@
  * Screen and Keyboard chip specifications given in the book.
  */
 
+
+
 CHIP Memory {
     IN in[16], load, address[15];
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    // 透過最高兩位 address[13..14] 區分選擇哪個裝置
+    // 00 -> RAM16K
+    // 01 -> RAM16K
+    // 10 -> Screen
+    // 11 -> Keyboard
+    DMux4Way(in=load, sel=address[13..14], a=loadRam1, b=loadRam2, c=loadScreen, d=loadKbd);
+    Or(a=loadRam1, b=loadRam2, out=loadRam);
+
+    // 關鍵位址截取：
+    // RAM16K 用 14 位元 address[0..13]
+    // Screen 用 13 位元 address[0..12]
+    RAM16K(in=in, load=loadRam, address=address[0..13], out=ramOut);
+    Screen(in=in, load=loadScreen, address=address[0..12], out=screenOut);
+    Keyboard(out=kbdOut);
+    Mux4Way16(a=screenOut, sel=address[13..14], out=screenOrKeyOut);
+    // 輸出選擇
+    Mux4Way16(a=ramOut, b=ramOut, c=screenOut, d=kbdOut, sel=address[13..14], out=out);
 }

@@ -19,5 +19,13 @@ CHIP Computer {
     IN reset;
 
     PARTS:
-    // Put your code here:
+    // ROM32K 的位址必須接 CPU 輸出的 pc，輸出為 instruction
+    ROM32K(address=pc, out=instruction);
+
+    // CPU 接腳確認
+    CPU(inM=memOut, instruction=instruction, reset=reset, 
+        outM=outM, writeM=writeM, addressM=addressM, pc=pc);
+
+    // Memory 的 input 必須接 outM，load 接 writeM，address 接 addressM
+    Memory(in=outM, load=writeM, address=addressM, out=memOut);
 }
