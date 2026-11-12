@@ -1,6 +1,6 @@
 
-| 週次 | 習題內容 | 上課且準時繳交 | 補交且附上請假證明 | 作業連結 |
-| :---: | :--- | :---: | :---: | :---: |
+| 週次 | 習題內容 | 上課且準時繳交 | 補交 | 附上請假證明 | 作業連結 |
+| :---: | :--- | :---: | :---: | :---: |:---: |
 | 3 | 第 1, 2 章 | 是 | | [01](https://github.com/cyhua7/_co/tree/main/01), [02](https://github.com/cyhua7/_co/tree/main/02)|
 | 4 | 第 3 章 (除 PC) | 是 | | [03](https://github.com/cyhua7/_co/tree/main/03) |
 | 5 | 第 4 章 | 是 | | [04](https://github.com/cyhua7/_co/tree/main/04) |
